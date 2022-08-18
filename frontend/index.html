@@ -11,19 +11,73 @@
             <h1>VideoStream</h1>
         </div>
         <div class="app-body">
-            <input type="button" value="UPLOAD" class="upload-button">
-            <div class="search">
-                <input type="text" placeholder="Enter video name...">
-                <input type="button" value="Go!">
+            <div class="search-and-upload">
+                <input type="button" value="UPLOAD" class="upload-button">
+                <div class="search">
+                    <input type="text" placeholder="Enter video name..." class="search-box">
+                    <input type="button" value="Go!" class="search-button">
+                </div>
             </div>
             <div class="video-list-container">
                 <ul class="video-list">
-                    <li></li>
-                    <li></li>
-                    <li></li>
+                    <li class="video-list-item">
+                        <img alt="Thumbnail" src="">
+                        <div class="video-details">
+                            <h3>Video Title</h3>
+                            <p>Video Description</p>
+                            <p>Duration: 00:00</p>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
         <script src="./index.js" type="text/javascript"></script>
     </body>
 </html>
+<!--
+    Default route ('/')
+
+            <div class="search-and-upload">
+                <input type="button" value="UPLOAD" class="upload-button">
+                <div class="search">
+                    <input type="text" placeholder="Enter video name..." class="search-box">
+                    <input type="button" value="Go!" class="search-button">
+                </div>
+            </div>
+            <div class="video-list-container">
+                <ul class="video-list">
+                    <li class="video-list-item">
+                        <img alt="Thumbnail" src="">
+                        <div class="video-details">
+                            <h3>Video Title</h3>
+                            <p>Video Description</p>
+                            <p>Duration: 00:00</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+    Video page
+
+            <div class="video-view">
+                <div>
+                    <video width="800" height="500" controls>
+                    </video>
+                    <h2>Video Title</h2>
+                    <input type="button" value="Like!" class="like-button">
+                    <p>0 Likes</p>
+                </div>
+                <div class="video-list-container-small">
+                    <ul class="video-list-small">
+                        <li class="video-list-item-small">
+                            <img alt="Thumbnail" src="">
+                            <div class="video-details">
+                                <h3>Video Title</h3>
+                                <p>Video Description</p>
+                                <p>Duration: 00:00</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+-->

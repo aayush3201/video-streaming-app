@@ -1,0 +1,144 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+.header {
+    height: 12vh;
+    background-color: blueviolet;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.app-body {
+    width: 100%
+}
+
+.upload-button {
+    padding: 7px;
+    color: white;
+    background-color: blueviolet;
+    border-color: blueviolet;
+}
+
+.upload-button:hover{
+    cursor: pointer;
+    color: blueviolet;
+    background-color: white;
+    font-weight: 600;
+}
+
+.header h1 {
+    color: white;
+    padding-left: 20px;
+}
+
+.search-box{
+    font-size: 20px;
+}
+
+.search-and-upload {
+    display: flex;
+    align-items: center;
+    height: 10vh;
+    justify-content: space-evenly;
+}
+
+.search-button {
+    font-size: 20px;
+    background-color: blueviolet;
+    color: white;
+    border-color: blueviolet;
+}
+
+.search-button:hover {
+    background-color: white;
+    color: blueviolet;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.video-list {
+    list-style: none;
+    margin-top: 10px;
+}
+
+.video-list-item {
+    width: 70%;
+    margin: auto;
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+    border: 1px #0000003f solid;
+}
+
+.video-list-item:hover {
+    cursor: pointer;
+    background-color: #0000003f;
+    border: none;
+}
+
+.video-list-item img{
+    height: 100%;
+    margin: 0px 10% 0px 2px;
+}
+
+.video-view {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.video-list-container-small {
+    width: 40%;
+    height: 80vh;
+    padding: 5px;
+    overflow-y: scroll;
+}
+.video-list-small{
+    width: 100%;
+    list-style: none;
+}
+
+.video-list-item-small{
+    width: 100%;
+    margin: auto;
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+    border: 1px #0000003f solid;
+}
+
+.video-list-item-small:hover {
+    cursor: pointer;
+    background-color: #0000003f;
+    border: none;
+}
+
+.video-list-item-small img {
+    height: 100%;
+    margin: 0px 10% 0px 2px;
+}
+
+video {
+    margin-bottom: 10px;
+}
+
+.like-button {
+    font-size: 20px;
+    background-color: blueviolet;
+    color: white;
+    border-color: blueviolet;
+    margin: 5px 0 5px 0;
+}
+
+.like-button:hover {
+    background-color: white;
+    color: blueviolet;
+    font-weight: 600;
+    cursor: pointer;
+}
