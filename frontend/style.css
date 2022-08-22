@@ -142,3 +142,54 @@ video {
     font-weight: 600;
     cursor: pointer;
 }
+
+.upload-page {
+    width: 90%;
+    margin: auto;
+}
+
+.upload-page p {
+    padding: 10px 0 10px 5px;
+}
+
+.upload-page div {
+    padding: 10px 0 10px 5px;
+}
+
+textarea {
+    padding: 2px;
+}
+
+.upload-page div input {
+    padding: 2px;
+}
+
+.submit-upload {
+    font-size: 20px;
+    background-color: blueviolet;
+    color: white;
+    border-color: blueviolet;
+    margin: 5px 0 5px 0;
+}
+
+.submit-upload:hover {
+    background-color: white;
+    color: blueviolet;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.go-back {
+    font-size: 20px;
+    background-color: blueviolet;
+    color: white;
+    border-color: blueviolet;
+    margin: 5px 0 5px 10px;
+}
+
+.go-back:hover {
+    background-color: white;
+    color: blueviolet;
+    font-weight: 600;
+    cursor: pointer;
+}
