@@ -11,6 +11,8 @@ const clientApp = path.join(__dirname, "../frontend"); // path to folder with th
 
 db.initDB();
 
+// db.clearTable();
+
 app.use(express.json()); // to parse application/json
 app.use(express.urlencoded({ extended: true })); // to parse application/x-www-form-urlencoded
 app.use('/',express.static(clientApp,{ extensions: ["html"] }));
@@ -19,7 +21,27 @@ app.route('/test').get((req,res) => {
     db.getAllVideos().then(()=>{
         console.log("Done");
     })
-})
+});
+
+app.route('/upload').post((req,res) => {
+    var name = req.body.name;
+    var description = req.body.description;
+    var id = uuidv4();
+    var obj = {
+        name: name,
+        description: description,
+        id: id
+    }
+    db.addVideo(obj).then(() => {
+        res.send(obj);
+    })
+});
+
+app.route('/getVideos').get((req,res) => {
+    db.getAllVideos().then((responseText)=>{
+        res.send(responseText);
+    });
+});
 
 app.listen(port,()=>{console.log(`Serving on port ${port}`)});
 

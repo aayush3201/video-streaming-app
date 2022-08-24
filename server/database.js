@@ -31,9 +31,14 @@ const addVideo = ({id,name,description}) => {
         con.connect(function(err) {
             if (err) throw err;
             con.query(`INSERT INTO main.videos (id,name,description) VALUES ('${id}','${name}','${description}');`, function(error, result, fields) {
-                if(error) console.log(error);
-                if(result) console.log(result);
-                if(fields) console.log(fields);
+                if(error) {
+                    console.log(error);
+                    reject();
+                }
+                if(result){
+                    console.log(result);
+                    resolve();
+                }
             });
             con.end();
         });
@@ -46,8 +51,14 @@ const getAllVideos = () => {
         con.connect(function(err) {
             if (err) throw err;
             con.query(`SELECT * FROM main.videos`, function(error, result, fields) {
-                if(error) console.log(error);
-                if(result) console.log(result);
+                if(error) {
+                    console.log(error);
+                    reject();
+                }
+                if(result){
+                    console.log(result);
+                    resolve(result);
+                }
             });
             con.end();
         });
