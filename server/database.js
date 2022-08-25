@@ -36,7 +36,6 @@ const addVideo = ({id,name,description}) => {
                     reject();
                 }
                 if(result){
-                    console.log(result);
                     resolve();
                 }
             });
@@ -56,7 +55,6 @@ const getAllVideos = () => {
                     reject();
                 }
                 if(result){
-                    console.log(result);
                     resolve(result);
                 }
             });

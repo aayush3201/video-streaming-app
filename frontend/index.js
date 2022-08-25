@@ -47,7 +47,7 @@ const renderUploadPage = () =>{
         <br/>
     </div>
     <div>
-        <label>Enter descripion of your video:</label>
+        <label>Enter description of your video:</label>
         <br/>
         <textarea maxlength="16777215" rows="4" cols="50" class="video-description-box"></textarea>
         <br/>
@@ -67,8 +67,16 @@ const renderUploadPage = () =>{
     document.querySelector('.submit-upload').addEventListener('click',()=>{
         var name = titleBox.value;
         var description = videoDescription.value;
-        postRequest('/upload',{name: name, description: description}).then((responseText)=>{
-            console.log(responseText);
+        var file = document.getElementById('videoFile').files[0];
+        var formData = new FormData();
+        formData.append('videoName',name);
+        formData.append('videoDescription',description);
+        formData.append('video',file);
+        fetch(window.location.origin +'/upload', {
+            method: "POST",
+            body: formData
+        }).then((result)=>{
+            console.log(result);
         })
     });
 }

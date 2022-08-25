@@ -4,6 +4,8 @@ const s3 = new AWS.S3();
 const db = require('./database.js');
 const { v4: uuidv4 } = require('uuid');
 const express = require('express');
+const formidable = require('formidable');
+const fs = require('fs');
 const path = require("path");
 const app = express();
 const port = 3000;
@@ -13,8 +15,8 @@ db.initDB();
 
 // db.clearTable();
 
-app.use(express.json()); // to parse application/json
-app.use(express.urlencoded({ extended: true })); // to parse application/x-www-form-urlencoded
+app.use(express.json({limit: "100mb"})); // to parse application/json
+app.use(express.urlencoded({ limit: "100mb",extended: true })); // to parse application/x-www-form-urlencoded
 app.use('/',express.static(clientApp,{ extensions: ["html"] }));
 
 app.route('/test').get((req,res) => {
@@ -24,16 +26,23 @@ app.route('/test').get((req,res) => {
 });
 
 app.route('/upload').post((req,res) => {
-    var name = req.body.name;
-    var description = req.body.description;
-    var id = uuidv4();
-    var obj = {
-        name: name,
-        description: description,
-        id: id
-    }
-    db.addVideo(obj).then(() => {
-        res.send(obj);
+    var form = new formidable.IncomingForm();
+    form.parse(req, (err,fields,file) => {
+        var name = fields.videoName;
+        var description = fields.videoDescription;
+        var id = uuidv4();
+        var filepath = file.video.filepath;
+        var newpath = './uploads/' + id + '.' + file.video.originalFilename.split('.')[1];
+        fs.renameSync(filepath,newpath);
+        // TODO: ADD S3 CODE HERE
+        var obj = {
+            id: id,
+            name: name,
+            description: description
+        };
+        db.addVideo(obj).then(()=>{
+            res.send(obj);
+        })
     })
 });
 
