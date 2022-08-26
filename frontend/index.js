@@ -70,11 +70,15 @@ const renderUploadPage = () =>{
     <input type="button" class="submit-upload" value="SUBMIT">
     <input type="button" class="go-back" value="BACK">
     </div>
+    <div class="overlay">
+    <h1>PLEASE WAIT!</h1>
+    </div>
     `;
     const titleBox = document.querySelector('.title-box');
     const videoDescription = document.querySelector('.video-description-box');
     document.querySelector('.go-back').addEventListener('click',renderHomePage);
-    document.querySelector('.submit-upload').addEventListener('click',()=>{
+    const overlay = document.querySelector('.overlay');
+    document.querySelector('.submit-upload').addEventListener('click',(event)=>{
         var name = titleBox.value;
         var description = videoDescription.value;
         var file = document.getElementById('videoFile').files[0];
@@ -82,6 +86,7 @@ const renderUploadPage = () =>{
         formData.append('videoName',name);
         formData.append('videoDescription',description);
         formData.append('video',file);
+        overlay.style.display = 'block'; // prevents multiple upload clicks
         fetch(window.location.origin +'/upload', {
             method: "POST",
             body: formData
@@ -109,21 +114,31 @@ const renderHomePage = () => {
     `;
     getRequest('/getVideos').then((res)=>{
         for(const video of res){
-            document.querySelector('.video-list').appendChild(
-                createDOM(`
-                <li class="video-list-item">
-                <img alt="Thumbnail" src="https://video-bucket-videostream.s3.ca-central-1.amazonaws.com/thumbnails/${video.id}-thumbnail.jpg" width="100" height="100">
-                <div class="video-details">
-                <h3>${video.name}</h3>
-                <p>${video.description}</p>
-                <p>Duration: ${formDuration(video.duration)}</p>
-                </div>
-                </li>
-                `)
-            )
+            var listItem = createDOM(`
+            <li class="video-list-item">
+            <img alt="Thumbnail" src="https://video-bucket-videostream.s3.ca-central-1.amazonaws.com/thumbnails/${video.id}-thumbnail.jpg" width="100" height="100">
+            <div class="video-details">
+            <h3>${video.name}</h3>
+            <p>${video.description}</p>
+            <p>Duration: ${formDuration(video.duration)}</p>
+            </div>
+            </li>
+            `);
+            listItem.video_id = video.id;
+            document.querySelector('.video-list').appendChild(listItem);
         }
-    })
+        document.querySelectorAll('.video-list-item').forEach((item) => {
+            item.addEventListener('click',(event)=>{
+                var target = event.target
+                while(!target.classList.contains('video-list-item')){
+                    target = target.parentElement;
+                }
+                window.location = `${window.location.origin}/video?id=${target.video_id}`
+            });
+        });
+    });
     const uploadButton = document.querySelector('.upload-button');
     uploadButton.addEventListener('click', renderUploadPage)
 }
+
 renderHomePage();

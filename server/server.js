@@ -17,6 +17,7 @@ const path = require("path");
 const app = express();
 const port = 3000;
 const clientApp = path.join(__dirname, "../frontend"); // path to folder with the HTML file
+const videoPage = path.join(__dirname,"../frontend/video_page") // path to folder with HTML file
 
 db.initDB();
 //db.deleteTable('videos');
@@ -25,12 +26,7 @@ db.initDB();
 app.use(express.json({limit: "100mb"})); // to parse application/json
 app.use(express.urlencoded({ limit: "100mb",extended: true })); // to parse application/x-www-form-urlencoded
 app.use('/',express.static(clientApp,{ extensions: ["html"] }));
-
-app.route('/test').get((req,res) => {
-    db.getAllVideos().then(()=>{
-        console.log("Done");
-    })
-});
+app.use('/video',express.static(videoPage,{extensions: ["html"]}));
 
 app.route('/upload').post(async (req,res) =>  {
     var form = new formidable.IncomingForm();
@@ -88,18 +84,29 @@ app.route('/getVideos').get((req,res) => {
     });
 });
 
+app.route('/getVideoName/:id').get((req,res) => {
+    const id = req.params.id;
+    const params = {
+        Bucket: 'video-bucket-videostream',
+        MaxKeys: '1',
+        Prefix: 'videos/' + id
+    }
+    s3.listObjects(params, (err,data) => {
+        if(err)
+            res.send(err);
+        res.send(data.Contents[0].Key);
+    })
+})
+
+app.route('/getVideoData/:id').get((req,res) => {
+    const id = req.params.id;
+    db.getVideoData(id).then((responseText) => {
+        res.send(responseText[0]);
+    })
+})
+
 app.listen(port,()=>{console.log(`Serving on port ${port}`)});
 
-/*s3.listObjects({
-    Bucket: "video-bucket-videostream",
-    Prefix: "xyz/"
-}, (err,data)=>{
-    if (err) {
-        console.log("Error", err);
-      } else {
-        console.log("Success", data);
-    }
-})*/
 
 /*app.route('/test').get((req,res) => {
     db.addVideo({
