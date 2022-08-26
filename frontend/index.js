@@ -26,6 +26,16 @@ const postRequest = (endpoint,content) => {
     });
 }
 
+const formDuration = (duration) => {
+    var hour = Math.floor(duration/3600);
+    var min = Math.floor(duration%3600/60);
+    var sec = Math.floor(duration%3600%60);
+    hour = hour<10?'0'+hour:''+hour
+    min = min<10?'0'+min:''+min
+    sec = sec<10?'0'+sec:''+sec
+    return `${hour}:${min}:${sec}`;
+}
+
 // Creates a DOM element from the given HTML string
 function createDOM(htmlString) {
     let template = document.createElement("template");
@@ -76,7 +86,8 @@ const renderUploadPage = () =>{
             method: "POST",
             body: formData
         }).then((result)=>{
-            console.log(result);
+            renderHomePage();
+            alert('Video uploaded!');
         })
     });
 }
@@ -101,11 +112,11 @@ const renderHomePage = () => {
             document.querySelector('.video-list').appendChild(
                 createDOM(`
                 <li class="video-list-item">
-                <img alt="Thumbnail" src="">
+                <img alt="Thumbnail" src="https://video-bucket-videostream.s3.ca-central-1.amazonaws.com/thumbnails/${video.id}-thumbnail.jpg" width="100" height="100">
                 <div class="video-details">
                 <h3>${video.name}</h3>
                 <p>${video.description}</p>
-                <p>Duration: 00:00</p>
+                <p>Duration: ${formDuration(video.duration)}</p>
                 </div>
                 </li>
                 `)
@@ -115,5 +126,4 @@ const renderHomePage = () => {
     const uploadButton = document.querySelector('.upload-button');
     uploadButton.addEventListener('click', renderUploadPage)
 }
-
 renderHomePage();

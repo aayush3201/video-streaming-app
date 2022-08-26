@@ -18,19 +18,19 @@ const initDB = () => {
     
         con.query('CREATE DATABASE IF NOT EXISTS main;');
         con.query('USE main;');
-        con.query('CREATE TABLE IF NOT EXISTS videos(id varchar(120), name varchar(120), description mediumtext, PRIMARY KEY(id));', function(error, result, fields) {
+        con.query('CREATE TABLE IF NOT EXISTS videos(id varchar(120), name varchar(120), description mediumtext, duration int , PRIMARY KEY(id));', function(error, result, fields) {
             console.log(result);
         });
         con.end();
     });
 }
 
-const addVideo = ({id,name,description}) => {
+const addVideo = ({id,name,description,duration}) => {
     const con = initConnection();
     return new Promise((resolve,reject)=>{
         con.connect(function(err) {
             if (err) throw err;
-            con.query(`INSERT INTO main.videos (id,name,description) VALUES ('${id}','${name}','${description}');`, function(error, result, fields) {
+            con.query(`INSERT INTO main.videos (id,name,description,duration) VALUES ('${id}','${name}','${description}',${duration});`, function(error, result, fields) {
                 if(error) {
                     console.log(error);
                     reject();
