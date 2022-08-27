@@ -82,6 +82,25 @@ const getVideoData = (id) => {
     })
 }
 
+const searchVideos = (search) => {
+    const con = initConnection();
+    return new Promise((resolve,reject)=>{
+        con.connect(function(err) {
+            if (err) throw err;
+            con.query(`SELECT * FROM main.videos WHERE (lower(name) LIKE "%${search.toLowerCase()}%")`, function(error, result, fields) {
+                if(error) {
+                    console.log(error);
+                    reject();
+                }
+                if(result){
+                    resolve(result);
+                }
+            });
+            con.end();
+        });
+    })
+}
+
 /* Functions for dev purposes */
 
 const deleteTable = (tableName) => {
@@ -119,4 +138,4 @@ const clearTable = () => {
 
 
 // Add all exports here!
-module.exports = {initDB,deleteTable,getVideoData,showTables,addVideo,getAllVideos,clearTable};
+module.exports = {initDB,deleteTable,getVideoData,showTables,addVideo,getAllVideos,clearTable,searchVideos};

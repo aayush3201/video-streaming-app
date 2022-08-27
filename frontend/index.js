@@ -1,12 +1,15 @@
 // Helper function to make GET requests
-const getRequest = (endpoint) => {
+const getRequest = (endpoint,content) => {
     return new Promise((resolve,reject)=>{
         var xhr = new XMLHttpRequest();
         xhr.open('GET', `${window.location.origin}${endpoint}`);
         xhr.onload = () => {
             resolve(JSON.parse(xhr.responseText))
         };
-        xhr.send();
+        if(content)
+            xhr.send(content)
+        else    
+            xhr.send();
     });
 }
 
@@ -113,32 +116,53 @@ const renderHomePage = () => {
     </div>
     `;
     getRequest('/getVideos').then((res)=>{
-        for(const video of res){
-            var listItem = createDOM(`
-            <li class="video-list-item">
-            <img alt="Thumbnail" src="https://video-bucket-videostream.s3.ca-central-1.amazonaws.com/thumbnails/${video.id}-thumbnail.jpg" width="100" height="100">
-            <div class="video-details">
-            <h3>${video.name}</h3>
-            <p>${video.description}</p>
-            <p>Duration: ${formDuration(video.duration)}</p>
-            </div>
-            </li>
-            `);
-            listItem.video_id = video.id;
-            document.querySelector('.video-list').appendChild(listItem);
-        }
-        document.querySelectorAll('.video-list-item').forEach((item) => {
-            item.addEventListener('click',(event)=>{
-                var target = event.target
-                while(!target.classList.contains('video-list-item')){
-                    target = target.parentElement;
-                }
-                window.location = `${window.location.origin}/video?id=${target.video_id}`
-            });
-        });
+        renderVideoList(res);
     });
     const uploadButton = document.querySelector('.upload-button');
     uploadButton.addEventListener('click', renderUploadPage)
+    document.querySelector('.search-button').addEventListener('click', () => {
+        const str = document.querySelector('.search-box').value;
+        fetch(window.location.origin + '/search', {
+            method: "POST",
+            body: JSON.stringify({
+                search: str
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res)=>{
+            res.json().then((obj)=>{
+                renderVideoList(obj);
+            });
+        });
+    });
+}
+
+const renderVideoList = (videos) => {
+    document.querySelector('.video-list').innerHTML = '';
+    for(const video of videos){
+        var listItem = createDOM(`
+        <li class="video-list-item">
+        <img alt="Thumbnail" src="https://video-bucket-videostream.s3.ca-central-1.amazonaws.com/thumbnails/${video.id}-thumbnail.jpg" width="100" height="100">
+        <div class="video-details">
+        <h3>${video.name}</h3>
+        <p>${video.description}</p>
+        <p>Duration: ${formDuration(video.duration)}</p>
+        </div>
+        </li>
+        `);
+        listItem.video_id = video.id;
+        document.querySelector('.video-list').appendChild(listItem);
+    }
+    document.querySelectorAll('.video-list-item').forEach((item) => {
+        item.addEventListener('click',(event)=>{
+            var target = event.target
+            while(!target.classList.contains('video-list-item')){
+                target = target.parentElement;
+            }
+            window.location = `${window.location.origin}/video?id=${target.video_id}`
+        });
+    });
 }
 
 renderHomePage();

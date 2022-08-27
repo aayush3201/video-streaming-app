@@ -20,7 +20,7 @@ const clientApp = path.join(__dirname, "../frontend"); // path to folder with th
 const videoPage = path.join(__dirname,"../frontend/video_page") // path to folder with HTML file
 
 db.initDB();
-//db.deleteTable('videos');
+// db.deleteTable('videos');
 // db.clearTable();
 
 app.use(express.json({limit: "100mb"})); // to parse application/json
@@ -39,7 +39,7 @@ app.route('/upload').post(async (req,res) =>  {
         if(!fs.existsSync('./uploads'))
             fs.mkdirSync('./uploads')
         var newpath = './uploads/' + id + '.' + file.video.originalFilename.split('.')[1];
-        var thumbnailPath = './uploads/' + id + '-thubnail.jpg';
+        var thumbnailPath = './uploads/' + id + '-thumbnail.jpg';
         fs.renameSync(filepath,newpath);
         var videoFile = fs.readFileSync(newpath);
         var duration = parseInt(await getVideoDurationInSeconds(newpath));
@@ -105,15 +105,11 @@ app.route('/getVideoData/:id').get((req,res) => {
     })
 })
 
+app.route('/search').post((req,res) => {
+    const str = req.body.search;
+    db.searchVideos(str).then((responseText)=>{
+        res.send(responseText);
+    });
+})
+
 app.listen(port,()=>{console.log(`Serving on port ${port}`)});
-
-
-/*app.route('/test').get((req,res) => {
-    db.addVideo({
-        id: uuidv4(),
-        name: 'Hello',
-        description: 'test'
-    }).then(()=>{
-        console.log("Done");
-    })
-})*/
