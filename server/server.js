@@ -1,6 +1,12 @@
 var AWS = require('aws-sdk');
-AWS.config.update({region: 'ca-central-1'});
-const s3 = new AWS.S3();
+require('dotenv').config();
+const config = {
+    region: 'ca-central-1',
+    accessKeyId: process.env.aws_access_key_id,
+    secretAccessKey: process.env.aws_secret_access_key
+}
+AWS.config.update(config);
+const s3 = new AWS.S3(config);
 const db = require('./database.js');
 const { v4: uuidv4 } = require('uuid');
 const express = require('express');
