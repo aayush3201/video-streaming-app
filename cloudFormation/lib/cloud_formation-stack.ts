@@ -2,7 +2,6 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import { DockerImageAsset } from 'aws-cdk-lib/aws-ecr-assets';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as rds from 'aws-cdk-lib/aws-rds';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
@@ -65,6 +64,18 @@ export class CloudFormationStack extends cdk.Stack {
       autoDeleteObjects: true
     });
 
+    // Database Security Group
+    const dbSecurityGroup = new ec2.SecurityGroup(this,'dbsecuritygroup',{
+      vpc: vpc,
+      allowAllOutbound: true,
+    });
+
+    dbSecurityGroup.addIngressRule(
+      ec2.Peer.anyIpv4(),
+      ec2.Port.tcp(3306),
+      'Rule to give access to RDS Database'
+    );
+
     // RDS Database
     const database = new rds.DatabaseInstance(this,'rdsDatabase',{
       vpc: vpc,
@@ -77,7 +88,8 @@ export class CloudFormationStack extends cdk.Stack {
       credentials: {
         username: databaseUsername.valueAsString,
         password: cdk.SecretValue.unsafePlainText(databasePassword.valueAsString)  
-      }
+      },
+      securityGroups: [dbSecurityGroup]
     });
 
     // Ouptuts
